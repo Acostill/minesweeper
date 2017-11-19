@@ -1,17 +1,17 @@
-let tbody = document.querySelector('tbody');
-let table = document.querySelector('table');
-let h2    = document.querySelector('h2');
-let 
-let timer = document.querySelector('timer');
-let start = true
-let numColors = [null, 'blue', 'green', 'red', 'purple', 'darkred', '#007B7B', 'brown', 'grey']
+let tbody      = document.querySelector('tbody');
+let table      = document.querySelector('table');
+let h2         = document.querySelector('h2');
+let mineCount  = document.querySelector('#mine-count');
+let timer      = document.querySelector('#timer');
+let start      = true
+let numColors  = [null, 'blue', 'green', 'red', 'purple', 'darkred', '#007B7B', 'brown', 'grey']
 let mines      = 99;
 let boardRow   = 16;
 let boardCol   = 30;
 let board      = makeBoard(boardRow, boardCol);
-let mineCount  = mines;
 let gameOver   = false;
-// var unrevealed = boardRow * boardCol;
+mineCount.innerText = mines;
+timer.innerText = 0;
 
 function Cell (row, column) {
     // this.position  = [row, column];
@@ -67,13 +67,13 @@ function Cell (row, column) {
         this.marked  = '&#x2691';
         this.htmlEl.innerHTML = this.marked;
         this.htmlEl.style.color = '#ded2b3';
-        mineCount++;
+        mineCount.innerText = Number(mineCount.innerText) - 1;
     }
     this.removeIndicators = () => {
         this.marked  = '';
         this.htmlEl.innerHTML = this.marked;
         this.getNum();
-        mineCount--;
+        mineCount.innerText = Number(mineCount.innerText) + 1;
     }
 }
 
@@ -190,6 +190,9 @@ table.addEventListener('click', (event) => {
         lockCells(cell);
         setMines(event);
         setNums();
+        setInterval(function () {
+            timer.innerText = Number(timer.innerText) + 1;
+        }, 1000)
         start = false;
     }
 
