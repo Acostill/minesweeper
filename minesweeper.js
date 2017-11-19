@@ -9,6 +9,7 @@ let mines      = 99;
 let boardRow   = 16;
 let boardCol   = 30;
 let board      = makeBoard(boardRow, boardCol);
+let gameTime;
 let gameOver   = false;
 mineCount.innerText = mines;
 timer.innerText = 0;
@@ -160,6 +161,7 @@ function reveal(cell, recursive) {
 }
 function endGame(cell, str) {
     gameOver = true;
+    clearInterval(gameTime);
     if (str === 'loss') {
         for (let r = 0; r < board.length; r++) {
             board[r].forEach(el => el.hasMine ? reveal(el):null)
@@ -190,7 +192,7 @@ table.addEventListener('click', (event) => {
         lockCells(cell);
         setMines(event);
         setNums();
-        setInterval(function () {
+        gameTime = setInterval(function () {
             timer.innerText = Number(timer.innerText) + 1;
         }, 1000)
         start = false;
