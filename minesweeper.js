@@ -1,13 +1,13 @@
 let tbody      = document.querySelector('tbody');
 let table      = document.querySelector('table');
-let h2         = document.querySelector('h2');
+let gameStatus = document.querySelector('#game-status');
 let mineCount  = document.querySelector('#mine-count');
 let timer      = document.querySelector('#timer');
 let start      = true
 let numColors  = [null, 'blue', 'green', 'red', 'purple', 'darkred', '#007B7B', 'brown', 'grey']
-let mines      = 99;
 let boardRow   = 16;
 let boardCol   = 30;
+let mines      = 99;
 let board      = makeBoard(boardRow, boardCol);
 let gameTime;
 let gameOver   = false;
@@ -15,7 +15,6 @@ mineCount.innerText = mines;
 timer.innerText = 0;
 
 function Cell (row, column) {
-    // this.position  = [row, column];
     this.row       = row;
     this.column    = column;
     this.hasMine   = false;
@@ -26,7 +25,7 @@ function Cell (row, column) {
     this.locked    = false;
     this.marked    = '';
     this.display   = '';
-    this.htmlEl    = table.children[row].children[column];
+    this.elem    = table.children[row].children[column];
 
     this.reveal    = (arg) => {
 
@@ -34,8 +33,8 @@ function Cell (row, column) {
             return;
         }
 
-        this.htmlEl.innerHTML = this.display;
-        this.htmlEl.style.backgroundColor = '#fff';
+        this.elem.innerHTML = this.display;
+        this.elem.style.backgroundColor = '#fff';
         this.revealed = true;
 
         if (!this.nearMine && arg === 'recursive')  {
@@ -56,7 +55,7 @@ function Cell (row, column) {
         this.nearMine = adjCells(this).filter(el => el.hasMine).length;
 
         if (!this.hasMine && this.nearMine !== 0) {
-            this.htmlEl.style.color = numColors[this.nearMine];
+            this.elem.style.color = numColors[this.nearMine];
             this.display = this.nearMine;
         }
     }
@@ -66,13 +65,13 @@ function Cell (row, column) {
             return;
         }
         this.marked  = '&#x2691';
-        this.htmlEl.innerHTML = this.marked;
-        this.htmlEl.style.color = '#ded2b3';
+        this.elem.innerHTML = this.marked;
+        this.elem.style.color = '#ded2b3';
         mineCount.innerText = Number(mineCount.innerText) - 1;
     }
     this.removeIndicators = () => {
         this.marked  = '';
-        this.htmlEl.innerHTML = this.marked;
+        this.elem.innerHTML = this.marked;
         this.getNum();
         mineCount.innerText = Number(mineCount.innerText) + 1;
     }
@@ -140,7 +139,7 @@ function setMines(event) {
         }
 
         cell.display = '&#x1F4A3';
-        cell.htmlEl.style.color = 'black';
+        cell.elem.style.color = 'black';
         cell.hasMine = true;
         cell.locked  = true;
         minesLeft--;
@@ -159,19 +158,29 @@ function reveal(cell, recursive) {
     }
     cell.reveal();
 }
+
 function endGame(cell, str) {
     gameOver = true;
     clearInterval(gameTime);
     if (str === 'loss') {
         for (let r = 0; r < board.length; r++) {
-            board[r].forEach(el => el.hasMine ? reveal(el):null)
+            board[r].forEach(el => {
+                el.hasMine ? (reveal(el)) : null
+            })
 
         }
-        cell.htmlEl.style.backgroundColor = 'red';
-        h2.innerHTML = 'Game Over';        
+        cell.elem.style.backgroundColor = 'red';
+        gameStatus.innerHTML = 'Game Over';        
     }
+    if (str === 'win') {
+        gameStatus.innerHTML = 'Victory';
 
+        for (let r = 0; r < board.length; r++) {
+            board[r].forEach(el => el.hasMine ? (!el.marked ? el.setFlag() : null) : null)
+        }
+    }
 }
+
 table.addEventListener('click', (event) => {
     if (gameOver) {
         return
@@ -179,8 +188,8 @@ table.addEventListener('click', (event) => {
     let cell;
     for (let row = 0; row < board.length; row++) {
         let foundCell = board[row].filter(function (cell) {
-            console.log(cell.htmlEl === event.target);
-            return cell.htmlEl === event.target;
+            console.log(cell.elem === event.target);
+            return cell.elem === event.target;
         })[0];
         if (foundCell) {
             cell = foundCell;
@@ -213,14 +222,7 @@ table.addEventListener('click', (event) => {
     //End game as victory if only cells left are mines
     console.log('Unrevealed cells: ' + unrevealed);
     if (unrevealed === mines) {
-        gameOver = true;
-        h2.innerHTML = 'Victory';
-
-        for (let r = 0; r < board.length; r++) {
-            board[r].forEach(el => el.hasMine ? el.setFlag():null)
-
-        }
-
+        endGame(cell, 'win');
     }
 });
 
@@ -232,8 +234,8 @@ table.addEventListener('contextmenu', event => {
     let cell;
     for (let row = 0; row < board.length; row++) {
         let foundCell = board[row].filter(function (cell) {
-            console.log(cell.htmlEl === event.target);
-            return cell.htmlEl === event.target;
+            console.log(cell.elem === event.target);
+            return cell.elem === event.target;
         })[0];
         if (foundCell) {
             cell = foundCell;
@@ -271,14 +273,7 @@ table.addEventListener('contextmenu', event => {
     //End game as victory if only cells left are mines
     console.log('Unrevealed cells: ' + unrevealed);
     if (unrevealed === mines) {
-        gameOver = true;
-        h2.innerHTML = 'Victory';
-
-        for (let r = 0; r < board.length; r++) {
-            board[r].forEach(el => el.hasMine ? el.setFlag():null)
-
-        }
-
+        endGame(cell, 'win');
     }
 
 })
