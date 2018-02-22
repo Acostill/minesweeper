@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="minesweeper.css">
     <title>minesweeper</title>
 </head>
@@ -12,6 +12,7 @@
 
     <div class="header">
         <h1>Minesweeper</h1>
+        <button id='start'>Start!</button>
         <pre><span id="mine-count"></span>   <span id ="game-status">Right-click: toggle flag</span>   <span id="timer"></span></pre>
         <p><span id="mine-count"></span><span id="timer"></span></p>
     </div>
@@ -21,11 +22,13 @@
         <!-- Row <input type="text" id="row-input">
         Column <input type ="text" id="col-input"> -->
     </div>
-
+      <input type='text' id='rows' placeholder='rows'/>
+      <input type='text' id='columns' placeholder='columns'/>
+      <input type='text' id='mines' placeholder='mines'/>
     <div class="footer">
 
     </div>
-    
+
 </body>
 <script src="minesweeper.js"></script>
 </html>
