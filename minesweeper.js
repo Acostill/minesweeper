@@ -3,6 +3,8 @@ startBtn.addEventListener('click', event => {
   let rowInput   = document.querySelector('#rows');
   let colInput   = document.querySelector('#columns');
   let mineInput  = document.querySelector('#mines');
+
+  let pregame    = document.querySelector('#pregame');
   let tbody      = document.querySelector('tbody');
   let table      = document.querySelector('table');
   let gameStatus = document.querySelector('#game-status');
@@ -19,6 +21,7 @@ startBtn.addEventListener('click', event => {
   mineCount.innerText = mines;
   timer.innerText = 0;
 
+  pregame.style.display = 'none';
   rowInput.style.display = 'none';
   colInput.style.display = 'none';
   mineInput.style.display = 'none';
