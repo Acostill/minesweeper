@@ -12,9 +12,9 @@ startBtn.addEventListener('click', event => {
   let timer      = document.querySelector('#timer');
   let start      = true
   let numColors  = [null, 'blue', 'green', 'red', 'purple', 'darkred', '#007B7B', 'brown', 'grey']
-  let boardRow   = rowInput.value
-  let boardCol   = colInput.value;
-  let mines      = mineInput.value;
+  let boardRow   = Number(rowInput.value);
+  let boardCol   = Number(colInput.value);
+  let mines      = Number(mineInput.value);
   let board      = makeBoard(boardRow, boardCol);
   let gameTime;
   let gameOver   = false;
