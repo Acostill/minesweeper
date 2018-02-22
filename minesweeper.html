@@ -13,11 +13,14 @@
     <div class="header">
         <h1>Minesweeper</h1>
         <div id='pregame'>
-          <button id='start'>Start!</button>
-          <input type='text' id='rows' placeholder='rows'/>
-          <input type='text' id='columns' placeholder='columns'/>
-          <input type='text' id='mines' placeholder='mines'/>
-          <h2>Beginner</h2>
+          <button id='start'>Start!
+          </button>
+          <select id='size'>
+            <option value='beginner'>Beginner</option>
+            <option value='intermediate'>Intermediate</option>
+            <option value='expert'>Expert</option>
+          </select>
+          <!-- <h2>Beginner</h2>
           <p>Rows: 10</p>
           <p>Columns: 10</p>
           <p>Mines: 10</p>
@@ -30,7 +33,7 @@
           <h2>Expert</h2>
           <p>Rows: 16</p>
           <p>Columns: 30</p>
-          <p>Mines: 99</p>
+          <p>Mines: 99</p> -->
         </div>
         <pre><span id="mine-count"></span>   <span id ="game-status">Right-click: toggle flag</span>   <span id="timer"></span></pre>
         <p><span id="mine-count"></span><span id="timer"></span></p>

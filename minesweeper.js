@@ -1,31 +1,51 @@
 let startBtn   = document.querySelector('#start');
 startBtn.addEventListener('click', event => {
+  let pregame    = document.querySelector('#pregame');
   let rowInput   = document.querySelector('#rows');
   let colInput   = document.querySelector('#columns');
   let mineInput  = document.querySelector('#mines');
-
-  let pregame    = document.querySelector('#pregame');
   let tbody      = document.querySelector('tbody');
   let table      = document.querySelector('table');
   let gameStatus = document.querySelector('#game-status');
   let mineCount  = document.querySelector('#mine-count');
   let timer      = document.querySelector('#timer');
-  let start      = true
+  let sizeSelect = document.querySelector('#size');
   let numColors  = [null, 'blue', 'green', 'red', 'purple', 'darkred', '#007B7B', 'brown', 'grey']
-  let boardRow   = Number(rowInput.value);
-  let boardCol   = Number(colInput.value);
-  let mines      = Number(mineInput.value);
-  let board      = makeBoard(boardRow, boardCol);
-  let gameTime;
+  let start      = true
   let gameOver   = false;
+  let boardRow;
+  let boardCol;
+  let mines;
+  let gameTime;
+
+  switch(sizeSelect.value) {
+    case 'beginner':
+      boardRow   = 10;
+      boardCol   = 10;
+      mines      = 10;
+      break;
+    case 'intermediate':
+      boardRow   = 16;
+      boardCol   = 16;
+      mines      = 40;
+      break;
+    case 'expert':
+      boardRow   = 16;
+      boardCol   = 30;
+      mines      = 99;
+      break;
+    default:
+      boardRow   = Number(rowInput.value);
+      boardCol   = Number(colInput.value);
+      mines      = Number(mineInput.value);
+  }
+
+
+  const board      = makeBoard(boardRow, boardCol);
   mineCount.innerText = mines;
   timer.innerText = 0;
 
   pregame.style.display = 'none';
-  rowInput.style.display = 'none';
-  colInput.style.display = 'none';
-  mineInput.style.display = 'none';
-  startBtn.style.display = 'none';
   function Cell (row, column) {
       this.row       = row;
       this.column    = column;
@@ -240,9 +260,9 @@ startBtn.addEventListener('click', event => {
 
   table.addEventListener('contextmenu', event => {
       event.preventDefault();
-      if (gameOver) {
-          return;
-      }
+      if (start) return;
+      if (gameOver) return;
+      
       let cell;
       for (let row = 0; row < board.length; row++) {
           let foundCell = board[row].filter(function (cell) {
